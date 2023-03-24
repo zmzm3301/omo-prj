@@ -1,68 +1,159 @@
 package com.omo.service;
 
-import java.util.HashMap;
-import java.util.stream.Collectors;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.omo.dto.post.PostRequest;
-import com.omo.dto.post.PostResponse;
-//import com.omo.entity.post.PostDAO;
-import com.omo.entity.post.Post;
-import com.omo.entity.post.PostDAO;
+import com.omo.dto.Member;
+import com.omo.dto.Post;
+import com.omo.repository.MemberRepository;
+import com.omo.repository.PostRepository;
+import com.omo.utils.JwtTokenProvider;
 
-import lombok.RequiredArgsConstructor;
+import jakarta.servlet.http.HttpServletRequest;
 
-@RequiredArgsConstructor
 @Service
-public class PostServiceImpl implements PostService {
+public class PostServiceImpl implements PostService{
 	
-	private final PostDAO dao;
+	@Autowired
+	private MemberRepository memberRepository;
+	@Autowired
+	private JwtTokenProvider jwtTokenProvider;
+	@Autowired
+	private PostRepository postRepository;
 	
 	@Transactional
 	@Override
-	public Post save(PostRequest postSave) {
-		return dao.save(postSave.toEntity());
+	public String add(Post post, Authentication authentication, HttpServletRequest request) {
+	        
+	        Member author = memberRepository.findByUsername(authentication.getName()).orElse(null); 
+	        String tokenWithPrefix = request.getHeader("Authorization");
+	        String token = "";
+	        if (tokenWithPrefix != null && tokenWithPrefix.startsWith("Bearer ")) {
+	            token = tokenWithPrefix.substring(7);
+	            // 이제 token 변수에는 접두어 "Bearer "를 제거한 토큰 값이 저장되어 있음
+	        }
+	        
+	        LocalDateTime now = LocalDateTime.now();
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	        String formattedDateTime = now.format(formatter);
+
+	        System.out.println(token);
+	        if(jwtTokenProvider.validateToken(token)) {
+	        
+		    	Post posts = Post.builder()
+		    			.title(post.getTitle())
+		    			.content(post.getContent())
+		    			.author(author)
+		    			.createdAt(formattedDateTime)
+		    			.notice(post.isNotice())
+		    			.build();
+		    	
+		    	postRepository.save(posts);
+		    	return "게시글 등록이 완료되었습니다.";
+	        }else {
+	        	return "게시글 등록에 실패했습니다.";
+	        }
+	    }
+	
+	@Override
+	public List<Post> list() {
+		List<Post> list = postRepository.findAllOrderByNoticeAndIdDesc();
+		System.out.println(list);
+		return list;
 	}
 	
-	@Transactional(readOnly = true)
 	@Override
-	public HashMap<String, Object> findAll(Integer page, Integer size) {
-		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		System.out.println("page:: " + page);
-		Page<Post> list = dao.findAll(PageRequest.of(page, size, Sort.by("id").descending()));
-		System.out.println("list:: " + list);
-		resultMap.put("list", list.stream().map(PostResponse::new).collect(Collectors.toList()));
-		resultMap.put("paging", list.getPageable());
-		resultMap.put("totalCnt", list.getTotalElements());
-		resultMap.put("totalPage", list.getTotalPages());
+	public Post detail(Post no) {
+		Long id = no.getId();
+		Post detail = postRepository.findById(id).orElse(null);
 		
-		return resultMap;
+		Member member = memberRepository.findById(detail.getAuthor().getNo()).orElse(null);
+		detail.setUsername(member.getUsername());
+		
+		
+		return detail;
 	}
 
 	@Override
-	public PostResponse findById(Long id) {
-		return new PostResponse(dao.findById(id).get());
+	public Post delete(Post no, Authentication authentication, HttpServletRequest request) {
+		Post post = postRepository.findById(no.getId()).orElse(null);
+		Member author = memberRepository.findByNo(post.getAuthor().getNo()).orElse(null);
+		String tokenWithPrefix = request.getHeader("Authorization");
+        String token = "";
+        Post result = new Post();
+        
+        if (tokenWithPrefix != null && tokenWithPrefix.startsWith("Bearer ")) {
+            token = tokenWithPrefix.substring(7);
+            // 이제 token 변수에는 접두어 "Bearer "를 제거한 토큰 값이 저장되어 있음
+        }
+		
+        if(jwtTokenProvider.validateToken(token) && authentication.getName().equals(author.getUsername())) {
+        	postRepository.deleteById(no.getId());
+        	result.setStatus(true);
+        	return result;
+        }else {
+        	return result;
+	}
 	}
 	
 	@Transactional
 	@Override
-	public void updatePost (PostRequest postRequest, Long id) {
-		Post post = dao.findById(id).orElseThrow(()->new IllegalArgumentException("해당게시물 없습니다"+id));
-		post.update(postRequest.getTitle(), postRequest.getContent());
+	public Post update(Post no, Post newpost, Authentication authentication, HttpServletRequest request) {
+	        
+	        Member author = memberRepository.findByUsername(authentication.getName()).orElse(null); 
+	        Post post = postRepository.findById(no.getId()).orElse(null);
+	        String tokenWithPrefix = request.getHeader("Authorization");
+	        String token = "";
+	        if (tokenWithPrefix != null && tokenWithPrefix.startsWith("Bearer ")) {
+	            token = tokenWithPrefix.substring(7);
+	            // 이제 token 변수에는 접두어 "Bearer "를 제거한 토큰 값이 저장되어 있음
+	        }
+	        
+	        LocalDateTime now = LocalDateTime.now();
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	        String formattedDateTime = now.format(formatter);
+
+	        Post result = new Post();
+	        
+	        if(jwtTokenProvider.validateToken(token) && authentication.getName().equals(author.getUsername())) {
+	        	post.setTitle(newpost.getTitle());
+	        	post.setContent(newpost.getContent());
+	        	post.setUpdatedAt(formattedDateTime);
+	        	
+		    	postRepository.save(post);
+		    	result.setStatus(true);
+		    	return result;
+	        }else {
+	        	result.setStatus(false);
+	        	return result;
+	        }
+	    }
+
+	@Override
+	public List<Post> myboard(Authentication authentication, HttpServletRequest request) {
+		Member author = memberRepository.findByUsername(authentication.getName()).orElse(null);
+        String tokenWithPrefix = request.getHeader("Authorization");
+        String token = "";
+        
+        if (tokenWithPrefix != null && tokenWithPrefix.startsWith("Bearer ")) {
+            token = tokenWithPrefix.substring(7);
+            // 이제 token 변수에는 접두어 "Bearer "를 제거한 토큰 값이 저장되어 있음
+        }
+        
+        if(jwtTokenProvider.validateToken(token)) {
+        	List<Post >myPost = postRepository.findAllByAuthor(author);
+        	return myPost;
+        }
+		return null;
 	}
 	
-//	public int updatePostReadCntInc(Long id) {
-//		return dao.updatePostReadCntInc(id);
-//	}
-//	
-	@Override
-	public void deleteById(Long id) {
-		dao.deleteById(id);
-	}
+	
+	
+	
 }

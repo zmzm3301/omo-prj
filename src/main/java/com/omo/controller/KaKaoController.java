@@ -41,7 +41,7 @@ public class KaKaoController {
 			String access_Token = ars[0];
 			System.out.println("access_Token" + access_Token);
 			HashMap<String, Object> userInfo = kservice.getUserInfo(access_Token);
-			KPerson kperson = kservice.kperson((String) userInfo.get("email"));
+//			KPerson kperson = kservice.kperson((String) userInfo.get("email"));
 		    
 		    if (userInfo.get("email") != null) {
 		        session.setAttribute("userId", userInfo.get("email"));
@@ -51,19 +51,19 @@ public class KaKaoController {
 		    Cookie cnickName = new Cookie("nickName", (String) userInfo.get("nickName"));
 		    Cookie cemail = new Cookie("email", (String) userInfo.get("email"));
 
-		    Cookie authority = new Cookie("authority", kperson.getAuthority());
+//		    Cookie authority = new Cookie("authority", kperson.getAuthority());
 		    
 		    cnickName.setHttpOnly(true);
 		    cemail.setHttpOnly(true);
-		    authority.setHttpOnly(true);
+//		    authority.setHttpOnly(true);
 		    
 		    cnickName.setSecure(true);
 		    cemail.setSecure(true);
-		    authority.setSecure(true);
+//		    authority.setSecure(true);
 
 			response.addCookie(cnickName);
 			response.addCookie(cemail);
-			response.addCookie(authority);
+//			response.addCookie(authority);
 			
 	        return userInfo;
 		} else {
@@ -85,8 +85,8 @@ public class KaKaoController {
 	
 	@GetMapping("/getCookie")
 	public String getCookie(@CookieValue String nickName, 
-			@CookieValue(required = false) String email, @CookieValue String authority) {
-		String arr = nickName + " " + email + " " + authority;
+			@CookieValue(required = false) String email) {
+		String arr = nickName + " " + email;
 
 		return arr;
 	}
@@ -96,7 +96,6 @@ public class KaKaoController {
 		if(kperson.getEmail() == null) {
 			kservice.addkperson(kperson);
 		}
-		
 		return kperson;
 	}
 	

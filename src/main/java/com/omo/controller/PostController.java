@@ -1,65 +1,59 @@
 package com.omo.controller;
 
-import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.omo.dto.post.PostRequest;
-import com.omo.dto.post.PostResponse;
+import com.omo.dto.Post;
 import com.omo.service.PostService;
 
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/post")
+@RequestMapping("/api/post")
 public class PostController {
 	@Autowired
-    private PostService service;
+	private PostService postService;
 
-    @GetMapping(path="/list")
-    public HashMap<String, Object> getPostListPage(Model model, @RequestParam(required = false, defaultValue = "1") Integer page, 
-    		@RequestParam(required = false, defaultValue = "10") Integer size, @RequestParam("pageNumber") Integer pageNumber) throws Exception {
-    	page = pageNumber;
-    	model.addAttribute("resultMap", service.findAll(page, size));
-
-    	return service.findAll(page, size);
-    }
-    
-    @GetMapping(path="/view/{id}")
-    public PostResponse getPostViewPage(Model model, PostRequest postRequest, @PathVariable Long id) throws Exception {
-    	try {
-    		if (postRequest.getId() != null) {
-    			model.addAttribute("info", service.findById(postRequest.getId()));
-    		}
-    	} catch (Exception e) {
-    		throw new Exception(e.getMessage());
-		}
-    	return service.findById(postRequest.getId());
-    }
-    
-    @PostMapping(path="/write")
-    public void postWriteAction(Model model, PostRequest postRequest) throws Exception {
-    	service.save(postRequest);
-    }
-    
-    @PutMapping(path="/update/{id}")
-    public void updateById(Model model, @RequestBody PostRequest postRequest, @PathVariable Long id) throws Exception {
-    	service.updatePost(postRequest, id);
+    @PostMapping("/add_post")
+    public ResponseEntity<String> add(@RequestBody Post post, Authentication authentication, HttpServletRequest request){
+    	return new ResponseEntity<String>(postService.add(post, authentication, request), HttpStatus.OK);
     }
     
     
-    @DeleteMapping(path="/delete/{id}")
-    public void deleteById(Model model, @PathVariable Long id) throws Exception {
-    	service.deleteById(id);
+    @GetMapping("/list")
+    public List<Post> list() {
+    	return postService.list();
     }
-
+	
+    @GetMapping(path="/detail/{no}")
+    public Post detail(@PathVariable Post no) {
+    	return postService.detail(no);
+    }
+    
+    @DeleteMapping(path="/delete/{no}")
+	public ResponseEntity<Post> delete(@PathVariable Post no,Authentication authentication, HttpServletRequest request) {
+		return new ResponseEntity<Post>(postService.delete(no, authentication, request), HttpStatus.OK);
+	}
+    
+    @PostMapping(path="/update/{no}")
+    public ResponseEntity<Post> update(@PathVariable Post no, @RequestBody Post post, Authentication authentication, HttpServletRequest request){
+    	return new ResponseEntity<Post>(postService.update(no, post, authentication, request), HttpStatus.OK);
+    }
+    
+    @PostMapping(path="/myboard")
+    public List<Post> myboard(Authentication authentication,HttpServletRequest request){
+    	return postService.myboard(authentication,request);
+    }
+    
 }

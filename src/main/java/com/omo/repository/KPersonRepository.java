@@ -1,4 +1,4 @@
-package com.omo.dao;
+package com.omo.repository;
 
 import java.util.Optional;
 

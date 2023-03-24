@@ -1,8 +1,8 @@
 package com.omo.service;
 
 import com.google.gson.JsonParser;
-import com.omo.dao.KPersonRepository;
 import com.omo.dto.KPerson;
+import com.omo.repository.KPersonRepository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -130,6 +130,7 @@ public class KaKaoServiceImpl implements KaKaoService{
 		if(kper!=null) {
 			return null;
 		}
+		kperson.setAuthority("USER");
 		KPerson joinKperson = dao.save(kperson);
 		return joinKperson.getEmail();
 	}

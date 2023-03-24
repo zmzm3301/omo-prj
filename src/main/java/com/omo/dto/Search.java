@@ -11,4 +11,9 @@ public class Search {
 	private String birth;
 	private String newPassword;
 	private String confirmNewPassword;
+	private boolean check;
+	private String nickname;
+	private String code;
+	private String errorMessage;
+	
 }

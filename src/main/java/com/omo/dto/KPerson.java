@@ -20,7 +20,7 @@ public class KPerson {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Long id;
 	
 	@Column(name = "email", unique = true)
 	private String email;

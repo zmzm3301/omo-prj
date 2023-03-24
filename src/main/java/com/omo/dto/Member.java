@@ -1,17 +1,24 @@
 package com.omo.dto;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.omo.utils.CustomAuthority;
+import com.omo.utils.CustomAuthorityDeserializer;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,13 +36,15 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 public class Member implements UserDetails {
+	private static final long serialVersionUID = 1L;
+
  
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="member_no" ,updatable = false, unique = true, nullable = false)
 	private Long no;
 
-    @Column(updatable = false, unique = true, nullable = false)
+    @Column(updatable = false, nullable = false)
     private String username;
  
     @Column(nullable = false)
@@ -43,13 +52,15 @@ public class Member implements UserDetails {
     
     private String name;
     
+    private String nickname;
+    
     private LocalDate birth;
     
     private String sex;
     
-    private LocalDateTime createdAt;
+    private String createdAt;
 
-    private LocalDateTime updatedAt;
+    private String updatedAt;
     
     @Column(nullable = false, columnDefinition = "int(5) default '0'")
     private Integer passwordwrong = 0;
@@ -57,32 +68,33 @@ public class Member implements UserDetails {
     @Column(name = "refreshToken")
     private String refreshtoken;
  
-
-
+    @JsonIgnore
     @OneToMany(mappedBy = "author")
+    private List<Comment> comments = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "author", cascade = CascadeType.DETACH, orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
 
-    @ElementCollection
+
+
+
+
+    @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
+    @JsonDeserialize(using = CustomAuthorityDeserializer.class)
     private List<String> roles = new ArrayList<>();
 
-    @Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		
-		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		authorities.add( () -> ("ROLE_USER"));
-		
-		return authorities;
-	}
-
+    @Override   //사용자의 권한 목록 리턴
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles.stream()
+                .map(CustomAuthority::new)
+                .collect(Collectors.toList());
+    }
 
     
     @Column(name = "activated")
     private boolean activated;
-    
-//    public Member(Long no) {
-//    	this.no = no;
-//    }
 
  
     @Override

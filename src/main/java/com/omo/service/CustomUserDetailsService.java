@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.omo.dto.Member;
-import com.omo.dao.MemberRepository;
+import com.omo.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +31,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return User.builder()
                 .username(member.getUsername())
                 .password(passwordEncoder.encode(member.getPassword()))
+//                .roles(member.getAuthorities().toArray(new String[0]))
                 .roles(member.getRoles().toArray(new String[0]))
                 .build();
     }

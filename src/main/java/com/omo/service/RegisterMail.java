@@ -9,7 +9,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.omo.dto.MailCode;
-import com.omo.dao.CodeRepository;
+import com.omo.dto.Search;
+import com.omo.repository.CodeRepository;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -53,7 +54,7 @@ public class RegisterMail implements MailServiceInter {
 		msgg += "</div>";
 		message.setText(msgg, "utf-8", "html");// 내용, charset 타입, subtype
 		// 보내는 사람의 이메일 주소, 보내는 사람 이름
-		message.setFrom(new InternetAddress("hs330819@naver.com", "박한성"));// 보내는 사람
+		message.setFrom(new InternetAddress("km1089@naver.com", "박한성"));// 보내는 사람
 
 		return message;
 	}
@@ -97,25 +98,30 @@ public class RegisterMail implements MailServiceInter {
 
 		// TODO Auto-generated method stub
 		MimeMessage message = createMessage(to); // 메일 발송
+		System.out.println(message);
 		try {// 예외처리
 			emailsender.send(message);
 		} catch (MailException es) {
 			es.printStackTrace();
 			throw new IllegalArgumentException();
+			
 		}
 
 
 		return ePw; // 메일로 보냈던 인증 코드를 서버로 반환
 	}
 
-	public String checkCode(MailCode mailcode) {
+	public Search checkCode(MailCode mailcode) {
 		String email = mailcode.getEmail();
 		String code = mailcode.getCode();
 		MailCode info = codeRepository.findByEmailAndCode(email, code);
+		Search check = new Search();
 		if(info == null) {
-			return "입력오류입니다.";
+			check.setCheck(false);
+			return check;
 		}
 		codeRepository.delete(info);
-		return "success";
+		check.setCheck(true);
+		return check;
 	}
 }

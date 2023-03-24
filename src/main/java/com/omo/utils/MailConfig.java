@@ -15,10 +15,12 @@ public class MailConfig {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
 
         javaMailSender.setHost("smtp.naver.com"); // 메인 도메인 서버 주소 => 정확히는 smtp 서버 주소
-        javaMailSender.setUsername("hs330819"); // 네이버 아이디
-        javaMailSender.setPassword("56QBX1T9Z3L1"); // 네이버 비밀번호
-
-        javaMailSender.setPort(465); // 메일 인증서버 포트
+        javaMailSender.setUsername("km1089"); // 네이버 아이디
+//        javaMailSender.setPassword("huze pcal xmzb pivd"); // 네이버 비밀번호
+        javaMailSender.setPassword("WBPQVSZM8YED");
+        
+        javaMailSender.setPort(465);
+ // 메일 인증서버 포트
 
         javaMailSender.setJavaMailProperties(getMailProperties()); // 메일 인증서버 정보 가져오기
 
@@ -33,6 +35,8 @@ public class MailConfig {
         properties.setProperty("mail.debug", "true"); // 디버그 사용
         properties.setProperty("mail.smtp.ssl.trust","smtp.naver.com"); // ssl 인증 서버는 smtp.naver.com
         properties.setProperty("mail.smtp.ssl.enable","true"); // ssl 사용
+//        properties.put("mail.smtp.host", "smtp.gmail.com");
+//        properties.put("mail.smtp.port", "587");
         return properties;
     }
 }
