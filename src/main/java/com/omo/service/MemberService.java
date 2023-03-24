@@ -74,7 +74,6 @@ public class MemberService {
     		member.setPasswordwrong(member.getPasswordwrong()+1);
     		String wrong = "비밀번호가" + member.getPasswordwrong() + "회 틀렸습니다. 10회 오류시 계정은 비활성화 됩니다.";
     		return JwtToken.builder().errorMessage(wrong).build();
-    		
     	}
 
     	

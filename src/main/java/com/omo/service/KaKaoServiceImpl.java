@@ -3,14 +3,23 @@ package com.omo.service;
 import com.google.gson.JsonParser;
 import com.omo.dao.KPersonRepository;
 import com.omo.dto.KPerson;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+
 import com.google.gson.JsonElement;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,6 +28,9 @@ public class KaKaoServiceImpl implements KaKaoService{
 	
 	@Autowired
 	KPersonRepository dao;
+	
+	@Autowired
+	private JdbcTemplate JT;
 
     public String getKakaoAccessToken (String code) {
     	String access_Token = "";
@@ -113,6 +125,11 @@ public class KaKaoServiceImpl implements KaKaoService{
 
 	@Override
 	public String addkperson(KPerson kperson) {
+		KPerson kper = dao.findByEmail(kperson.getEmail()).orElse(null);
+		
+		if(kper!=null) {
+			return null;
+		}
 		KPerson joinKperson = dao.save(kperson);
 		return joinKperson.getEmail();
 	}
@@ -124,14 +141,24 @@ public class KaKaoServiceImpl implements KaKaoService{
 		return kperson;
 	}
 
+	@Transactional
 	@Override
 	public void delKperosn(String email) {
-		dao.deleteById(email);
+		dao.deleteByEmail(email);
+	}
+	
+	@Override
+	public KPerson kperson(String email) {
+		return dao.findByEmail(email).orElse(null);
 	}
 
+	@Transactional
 	@Override
-	public int updateKPerson(String email, String authority) {
-		return dao.updateKPerson(email, authority);
+	public void updateKPerson(int id, String authority) {
+		System.out.println("kserI: " + id);
+		System.out.println("kserA: " + authority);
+		
+		dao.save(id, authority);
 	}
 
 }

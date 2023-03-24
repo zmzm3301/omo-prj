@@ -11,5 +11,6 @@ public interface KaKaoService {
 	String addkperson(KPerson kperson);
 	List<KPerson> Kpersons();
 	void delKperosn(String email);
-	int updateKPerson(String email, String authority);
+	void updateKPerson(int id, String authority);
+	KPerson kperson(String email);
 }

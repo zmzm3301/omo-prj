@@ -1,0 +1,17 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<c:if test="${userId eq null}">
+        <a href="">
+            <img src="/img/kakao_login_medium_narrow.png">
+        </a>
+    </c:if>
+    <c:if test="${userId ne null}">
+        <h1>로그인 성공입니다</h1>
+    </c:if>
+    123333
+</body>
+</html>
