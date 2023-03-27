@@ -1,1 +1,1 @@
-# omo-prj
+# omo-prj.github.io
