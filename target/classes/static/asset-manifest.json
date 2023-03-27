@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/omo-prj.github.io/static/css/main.f298b676.css",
+    "main.js": "/omo-prj.github.io/static/js/main.6b4cafa1.js",
+    "static/js/787.e577274b.chunk.js": "/omo-prj.github.io/static/js/787.e577274b.chunk.js",
+    "static/media/NotoSansKR-Regular.otf": "/omo-prj.github.io/static/media/NotoSansKR-Regular.e1aa54c04a18648e6468.otf",
+    "static/media/IMG_8197.jpg": "/omo-prj.github.io/static/media/IMG_8197.76d9acb3208b3aa38477.jpg",
+    "static/media/map.png": "/omo-prj.github.io/static/media/map.4e5b4d93e271d5ebab3d.png",
+    "static/media/slick.svg": "/omo-prj.github.io/static/media/slick.2630a3e3eab21c607e21.svg",
+    "static/media/slick.eot": "/omo-prj.github.io/static/media/slick.a4e97f5a2a64f0ab1323.eot",
+    "static/media/slick.ttf": "/omo-prj.github.io/static/media/slick.c94f7671dcc99dce43e2.ttf",
+    "static/media/slick.woff": "/omo-prj.github.io/static/media/slick.295183786cd8a1389865.woff",
+    "index.html": "/omo-prj.github.io/index.html",
+    "static/media/index.cjs": "/omo-prj.github.io/static/media/index.cd351d7c31d0d3fccf96.cjs",
+    "main.f298b676.css.map": "/omo-prj.github.io/static/css/main.f298b676.css.map",
+    "main.6b4cafa1.js.map": "/omo-prj.github.io/static/js/main.6b4cafa1.js.map",
+    "787.e577274b.chunk.js.map": "/omo-prj.github.io/static/js/787.e577274b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f298b676.css",
+    "static/js/main.6b4cafa1.js"
+  ]
+}
