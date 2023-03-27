@@ -1,0 +1,291 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "gothicA";
+  src: url(/src/assets/fonts/Noto_Sans_KR/NotoSansKR-Regular.otf);
+}
+
+
+
+@media screen and (max-width: 900px) {
+  #whatsDiv {
+    width: 100% !important;
+  }
+
+  #whatsGroup {
+    display: grid;
+    justify-content: center;
+  }
+
+  #whatsGroup2 {
+    margin-bottom: 13px;
+  }
+
+  #omo-card {
+    width: 300px;
+  }
+
+  #sectionP {
+    text-align: center;
+  }
+
+  #omocardDiv {
+    display: grid;
+    width: 612px;
+    height: 650px !important;
+  }
+
+  #robot {
+    display: grid;
+    justify-content: center;
+    width: 100% !important;
+  }
+
+  #mapDiv {
+    margin-top: -50px;
+    margin-left: 20px;
+  }
+
+  #omoButton {
+    margin-left: 0;
+    display: grid;
+    justify-content: center;
+    margin-top: -120px;
+  }
+
+  #omoState {
+    left: 150px;
+    top: 20px;
+    margin: 0;
+    position: absolute;
+    height: 380px;
+  }
+
+  #imgSlideBox {
+    width: 612px !important;
+    height: 300px !important;
+    margin: auto !important;
+  }
+
+  #gallery {
+    width: 100% !important;
+    margin-top: 0 !important;
+  }
+
+  #kakaoMapDiv {
+    width: 612px;
+    margin: auto;
+  }
+
+  #contact {
+    width: 100% !important;
+  }
+
+  #kakaoMapP {
+    text-align: center;
+  }
+
+  #mailDiv {
+    display: grid;
+    width: 612px;
+    margin: auto;
+  }
+
+  #sendMail {
+    margin-left: 0 !important;
+    margin-bottom: 30px;
+  }
+
+  #companyInfo {
+    margin-top: 20px;
+    margin-bottom: 30px;
+  }
+
+  #mailInfo {
+    margin-top: 20px !important;
+  }
+
+  #telInfo {
+    margin-top: 20px !important;
+  }
+
+  #boardListDiv {
+    width: 95% !important;
+  }
+
+  #boardDetailDiv {
+    width: 95% !important;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  #whatsDiv {
+    width: 100% !important;
+  }
+
+  #whatsGroup {
+    display: grid;
+    justify-content: center;
+  }
+
+  #whatsGroup2 {
+    margin-bottom: 13px;
+    display: grid;
+    margin-bottom: 0;
+  }
+
+  #whatsGroup3 {
+    margin-bottom: 13px;
+    display: grid;
+  }
+
+  #omo-card {
+    width: 350px;
+    margin: auto !important;
+    margin-top: 20px !important;
+  }
+
+  #sectionP {
+    text-align: center;
+  }
+
+  #omoInfo {
+    display: grid;
+    justify-content: center;
+  }
+
+  #omocardDiv {
+    display: grid;
+    justify-content: center;
+    width: 350px;
+    height: 650px !important;
+  }
+
+  #infoIcons {
+    display: flex;
+    justify-content: center !important;
+    margin-bottom: 20px;
+  }
+
+  #twitterIcon {
+    margin-right: 0 !important;
+  }
+
+  #omoP {
+    font-size: medium !important;
+  }
+
+  #robot {
+    display: grid;
+    justify-content: center;
+    width: 350px !important;
+  }
+
+  #mapDiv {
+    margin-top: -50px;
+    margin-left: -80px;
+  }
+
+  #omoButton {
+    margin-left: 0;
+    display: grid;
+    justify-content: center;
+    margin-top: -120px;
+  }
+
+  #omoState {
+    left: 37px;
+    top: 10px;
+    margin: 0;
+    position: absolute;
+    height: 330px;
+    width: 280px;
+  }
+
+  #batteryInfo {
+    margin-top: 0 !important;
+  }
+
+  #imgSlideBox {
+    width: 350px !important;
+    height: 220px !important;
+    margin: auto !important;
+  }
+
+  #gallery {
+    width: 100% !important;
+    margin-top: 0 !important;
+  }
+
+  #kakaoMapDiv {
+    width: 350px;
+    margin: auto;
+  }
+
+  #contact {
+    width: 100% !important;
+  }
+
+  #kakaoMapP {
+    text-align: center;
+  }
+
+  #mailDiv {
+    display: grid;
+    width: 350px;
+    margin: auto;
+  }
+
+  #sendMail {
+    margin-left: 0 !important;
+    margin-bottom: 30px;
+  }
+
+  #companyInfo {
+    margin-top: 20px;
+    margin-bottom: 30px;
+  }
+
+  #mailInfo {
+    margin-top: 20px !important;
+  }
+
+  #telInfo {
+    margin-top: 20px !important;
+  }
+}
+
+:root {
+  --primary-color: #5bb462;
+  --primary-dark: #4f9c55;
+  --secondary-color: #ffea00;
+  --secondary-dark: #e3d002;
+  --overlay: rgba(0, 0, 0, 0.7);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#map-card>* {
+  pointer-events: none;
+}
+
+#omo-card>* {
+  pointer-events: none;
+}
+
+body {
+  margin: 0;
+
+  font-family: "gothicA";
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
